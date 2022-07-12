@@ -72,18 +72,6 @@ def main():
 
     pilha = PilhasDeProdutos()
 
-    # produto1 = Produto("Produto 1", "arroz", date(2020, 1, 1))
-    # produto2 = Produto("Produto 2", "arroz", date(2020, 1, 2))
-    # produto3 = Produto("Produto 3", "arroz", date(2020, 1, 3))
-    # produto4 = Produto("Produto 4", "arroz", date(2020, 1, 4))
-
-    # pilha.add(produto3)
-    # pilha.add(produto2)
-    # pilha.add(produto1)
-    # pilha.add(produto4)
-
-    # pilha.show()
-    # return
     while True:
         option = menu()
 
