@@ -14,18 +14,30 @@ class ProductStack:
 
     def add(self, product: Product):
         stack = self._products.get(product.category, None)
+        temp_stack = []
 
         if stack is None:
+            print("Inserir produto: ", product)
             self._products[product.category] = [product]
             return True
 
         for i in reversed(range(len(stack))):
-            if product.expiration < stack[i].expiration:
-                print("Inserir produto: ", product)
-                stack.append(product)
-                return True
-            else:
+            if product.expiration >= stack[i].expiration:
                 print("Remover produto: ", stack[i])
+                temp_stack.append(stack.pop(i))
+
+        print("Inserir produto: ", product)
+        stack.append(product)
+        self._products[product.category] = stack + temp_stack
+
+        for product in reversed(temp_stack):
+            print("Inserir produto: ", product)
+            stack.append(product)
+            self._products[product.category] = stack
+
+        
+    
+        return True
 
     def remove(self):
         return self._products.pop()
@@ -34,7 +46,7 @@ class ProductStack:
         for category, products in self._products.items():
             print(f"{category}:")
             for product in products:
-                print(product)
+                print("\t", product)
             print("\n")
 
 
@@ -60,7 +72,7 @@ product4 = Product("Produto 4", "arroz", date(2020, 1, 4))
 stack.add(product3)
 stack.add(product2)
 stack.add(product1)
-# stack.add(product4)
+stack.add(product4)
 
 stack.show()
 
