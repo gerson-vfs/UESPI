@@ -1,55 +1,55 @@
 from datetime import date
 
 class Produto:
-    def __init__(self, name: str, category: str, expiration: date):
-        self.name = name
-        self.category = category
-        self.expiration = expiration
+    def __init__(self, nome: str, categoria: str, data_de_vencimento: date):
+        self.nome = nome
+        self.categoria = categoria
+        self.data_de_vencimento = data_de_vencimento
 
     def __str__(self):
-        formated_expiration = self.expiration.strftime("%d/%m/%Y")
-        return f"{self.name} - {self.category} - {formated_expiration}"
+        data_de_vencimento_formatada = self.data_de_vencimento.strftime("%d/%m/%Y")
+        return f"{self.nome} - {self.categoria} - {data_de_vencimento_formatada}"
 
 class PilhasDeProdutos:
-    _pilhas = {}
+    _categorias = {}
 
-    def add(self, product: Produto):
-        pilha = self._pilhas.get(product.category, None)
-        temp_stack = []
+    def add(self, produto: Produto):
+        pilha = self._categorias.get(produto.categoria, None)
+        pilha_temporaria = []
 
         if pilha is None:
-            print("Empilhe o produto: ", product)
-            self._pilhas[product.category] = [product]
+            print("Empilhe o produto: ", produto)
+            self._categorias[produto.categoria] = [produto]
             return True
 
         for i in reversed(range(len(pilha))):
-            if product.expiration > pilha[i].expiration:
+            if produto.data_de_vencimento > pilha[i].data_de_vencimento:
                 print("Remova o produto: ", pilha[i])
-                temp_stack.append(pilha.pop(i))
+                pilha_temporaria.append(pilha.pop(i))
 
-        print("Empilhe o produto: ", product)
-        pilha.append(product)
-        self._pilhas[product.category] = pilha + temp_stack
+        print("Empilhe o produto: ", produto)
+        pilha.append(produto)
+        self._categorias[produto.categoria] = pilha + pilha_temporaria
 
-        for product in reversed(temp_stack):
-            print("Empilhe o produto: ", product)
-            pilha.append(product)
-            self._pilhas[product.category] = pilha
+        for produto in reversed(pilha_temporaria):
+            print("Empilhe o produto: ", produto)
+            pilha.append(produto)
+            self._categorias[produto.categoria] = pilha
 
         return True
 
-    def remove(self, category):
-        pilha = self._pilhas.get(category, [])
+    def remove(self, categoria):
+        pilha = self._categorias.get(categoria, [])
         if len(pilha) == 0:
             return None
         return pilha.pop()
 
     def show(self):
-        for category, products in self._pilhas.items():
+        for categoria, produtos in self._categorias.items():
             print("\n---------------------------------------\n")
-            print("Categoria: {}".format(category))
-            for product in reversed(products):
-                print("    {}".format(product))
+            print("Categoria: {}".format(categoria))
+            for produto in reversed(produtos):
+                print("    {}".format(produto))
             print("\n")
         print("---------------------------------------\n")
 
@@ -73,30 +73,30 @@ def main():
     pilha = PilhasDeProdutos()
 
     while True:
-        option = menu()
+        opcao = menu()
 
-        if option == "1":
+        if opcao == "1":
             print("\n--------- Cadastrando Produto ---------\n")
 
-            name = input("Nome: ")
-            category = input("Categoria: ").lower()
-            [day, month, year] = input("Data de validade (dd/mm/YYYY): ").split("/")
-            product = Produto(name, category, date(int(year), int(month), int(day)))
-            pilha.add(product)
+            nome = input("Nome: ")
+            categoria = input("Categoria: ").lower()
+            [dia, mes, ano] = input("Data de validade (dd/mm/YYYY): ").split("/")
+            produto = Produto(nome, categoria, date(int(ano), int(mes), int(dia)))
+            pilha.add(produto)
             print("\n---------------------------------------\n")
 
-        elif option == "2":
+        elif opcao == "2":
             pilha.show()
 
-        elif option == "3":
-            category = input()
-            produto = pilha.remove(category)
+        elif opcao == "3":
+            categoria = input()
+            produto = pilha.remove(categoria)
             if produto:
                 print(produto)
             else:
                 print("Essa categoria não tem produtos")
 
-        elif option == "0":
+        elif opcao == "0":
             return
 
 if __name__ == "__main__":
